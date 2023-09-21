@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "dotenv": "^16.3.1",
     "inquirer": "^8.2.4",
     "mysql2": "^3.6.1"
   },
@@ -7,7 +8,6 @@
   "description": "A command-line application that manages a company's employee database",
   "version": "1.0.0",
   "main": "index.js",
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
