@@ -1,0 +1,8 @@
+DROP DATABASE IF EXISTS localhost;
+CREATE DATABASE localhost;
+
+USE localhost;
+
+CREATE TABLE departments (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+);
