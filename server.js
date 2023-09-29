@@ -1,23 +1,23 @@
 const mysql = require("mysql2");
 const inquirer = require("inquirer");
 
-const connection = mysql.createConnection(
-  `mysql://root:password@localhost:3306/localhost`
-);
+// const connection = mysql.createConnection(
+//   `mysql://root:password@localhost:3306/localhost`
+// );
 
-// const connection = mysql2.createConnection({
-//   host: "localhost",
-//   dialect: "root",
-//   database: "localhost",
-//   password: "password",
-//   port: 3306,
-// });
+const connection = mysql.createConnection({
+  host: "localhost",
+  dialect: "root",
+  database: "localhost",
+  password: "password",
+  port: 3306,
+});
 
 function start() {
   inquirer
     .prompt({
       type: "list",
-      name: "init",
+      name: "start",
       message: "What would you like to do?",
       choices: [
         "View All Employees",
@@ -30,19 +30,19 @@ function start() {
       ],
     })
     .then((response) => {
-      if (response.init === "View All Employees") {
+      if (response.start === "View All Employees") {
         viewAllEmployees();
-      } else if (response.init === "Add Employee") {
+      } else if (response.start === "Add Employee") {
         addEmployees();
-      } else if (response.init === "Update Employee Role") {
+      } else if (response.start === "Update Employee Role") {
         updateEmployee();
-      } else if (response.init === "View All Roles") {
+      } else if (response.start === "View All Roles") {
         viewAllRoles();
-      } else if (response.init === "Add Role") {
+      } else if (response.start === "Add Role") {
         addRoles();
-      } else if (response.init === "View All Departments") {
+      } else if (response.start === "View All Departments") {
         viewAllDepartments();
-      } else if (response.init === "Add Department") {
+      } else if (response.start === "Add Department") {
         addDepartments();
       } else {
         console.log("please choose one of the options");
