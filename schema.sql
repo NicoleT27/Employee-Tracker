@@ -8,7 +8,7 @@ department_name VARCHAR(30),
 PRIMARY KEY(department_id)
 );
 
-INSERT INTO departments (name) VALUES("Sales"),("Engineering"),("Finance"),("Legal");
+INSERT INTO department (department_name) VALUES("Sales"),("Engineering"),("Finance"),("Legal");
 
 CREATE TABLE roles (
 role_id INT AUTO_INCREMENT,
