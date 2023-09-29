@@ -1,16 +1,20 @@
 const mysql = require("mysql2");
 const inquirer = require("inquirer");
-
-// const connection = mysql.createConnection(
-//   `mysql://root:password@localhost:3306/localhost`
-// );
+const cTable = require("console.table");
 
 const connection = mysql.createConnection({
   host: "localhost",
-  dialect: "root",
-  database: "localhost",
+  // Your username
+  user: "root",
+  // Your password
   password: "password",
-  port: 3306,
+  database: "employees",
+});
+
+connection.connect(function (err) {
+  if (err) throw err;
+  console.log("Connection successful!");
+  start();
 });
 
 function start() {
@@ -51,7 +55,7 @@ function start() {
 }
 
 function viewAllDepartments() {
-  connection.query("SELECT * FROM departments", (error, results) => {
+  connection.query("SELECT * FROM department", (error, results) => {
     if (error) throw error;
     console.table(results);
     start();
@@ -81,40 +85,49 @@ function addDepartments() {
     })
     .then((response) => {
       console.log(response.name);
-      `INSERT INTO departments (name) VALUES ("${answer.name}")`;
+      `INSERT INTO department (department_name) VALUES ("${response.name}")`;
       connection.query((error, results) => {
         if (error) throw error;
-        console.log(`Added department ${answer.name} to the database!`);
+        console.log("Added department to the database!");
         start();
       });
     });
 }
 
 function addRoles() {
-  inquirer
-    .prompt(
-      {
-        type: "input",
-        name: "name",
-        message: "What is the name of the role?",
-      },
-      {
-        type: "input",
-        name: "salary",
-        message: "What is the salary of the role?",
-      },
-      {
-        type: "list",
-        name: "department",
-        message: "Which department does the role belong to ?",
-        choices: departments,
-      }
-    )
-    .then((response) => {
-      connection.query("SELECT name FROM departments", (error, results) => {
-        if (error) throw error;
-        console.tables(response);
-        start();
+  connection.query("SELECT * FROM departments", (error, results) => {
+    if (error) throw error;
+    inquirer
+      .prompt(
+        {
+          type: "input",
+          name: "name",
+          message: "What is the name of the role?",
+        },
+        {
+          type: "input",
+          name: "salary",
+          message: "What is the salary of the role?",
+        },
+        {
+          type: "list",
+          name: "department",
+          message: "Which department does the role belong to ?",
+          choices: response.map((departments) => departments.department_name),
+        }
+      )
+      .then((response) => {
+        const departments = results.find(
+          (department) => department.name === response.department
+        );
+        `INSERT INTO roles (title) VALUES (${response.title}),("${response.salary}")(department)`;
+        connection.query((error, results) => {
+          if (error) throw error;
+          console.los("added role with salary to the database!");
+          start();
+        });
       });
-    });
+  });
 }
+
+start();

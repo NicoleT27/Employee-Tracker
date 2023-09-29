@@ -1,10 +1,10 @@
-CREATE DATABASE localhost;
+CREATE DATABASE employees;
 
-USE localhost;
+USE employees;
 
-CREATE TABLE departments (
+CREATE TABLE department (
 department_id INT NOT NULL AUTO_INCREMENT,
-name VARCHAR(30),
+department_name VARCHAR(30),
 PRIMARY KEY(department_id)
 );
 
