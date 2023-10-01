@@ -12,7 +12,7 @@ A command-line application that manages a company's employee database
 ## Install
 NPM Inquirer, NPM mysql2, and Node 
 ## Usage
-
+The user will open the terminal and begin program with NPM start. It will then have a series of options that can be chosen depending on the desired outcome. The user has the choice to pick between :view all departments, view all roles, view all employees, add a department, add a role, add an employee, and update an employee role. Once a option is clicked it will either show a table with the specific data chosen or prompt for more questions if the desired choice was a action of either adding or updating data. 
 ## License
 ISC
 ## Questions 
