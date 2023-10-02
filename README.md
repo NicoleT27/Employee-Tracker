@@ -1,4 +1,4 @@
-# Exmployee-Tracker
+# Employee-Tracker
 by Nicole Torres
 Licensed under 
 ![Github License](https://img.shields.io/badge/License-ISC-blue.svg)
