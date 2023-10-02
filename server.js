@@ -130,7 +130,7 @@ function addRoles() {
    }
  );
   };
-
+function addEmployees() {
   connection.query(
     "SELECT roles.role_id, title FROM roles",
     (error, results) => {
@@ -197,7 +197,7 @@ function addRoles() {
       );
     }
   );
-
+  }
 
 
 
