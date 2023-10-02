@@ -38,7 +38,7 @@ function start() {
       } else if (response.start === "Add Employee") {
         addEmployees();
       } else if (response.start === "Update Employee Role") {
-        updateEmployee();
+        updateEmployeeRole();
       } else if (response.start === "View All Roles") {
         viewAllRoles();
       } else if (response.start === "Add Role") {
@@ -73,7 +73,7 @@ function viewAllRoles() {
 }
 function viewAllEmployees() {
   connection.query(
-"SELECT employee.employee_id, employee.first_name, employee.last_name, joined_table.title, department.department_name, joined_table.salary, managers.manager_name AS manager_name FROM employee LEFT JOIN (SELECT roles.title, roles.salary, managers.manager_id FROM roles JOIN managers ON roles.role_id = managers.manager_id) AS joined_table ON employee.employee_id = joined_table.manager_id JOIN department ON employee.employee_id = department.department_id JOIN managers ON joined_table.manager_id = managers.manager_id",
+    "SELECT employee.employee_id, employee.first_name, employee.last_name, roles.title, department.department_name, roles.salary, manager_name FROM employee LEFT JOIN roles on employee.role_id = roles.role_id LEFT JOIN department on roles.department_id = department.department_id LEFT JOIN managers on managers.manager_id = employee.manager_id",
     (error, results) => {
       if (error) throw error;
       console.table(results);
@@ -139,7 +139,7 @@ function addEmployees() {
         return;
       }
 
-      const roles = results.map(({ role_id, title }) => ({
+      const roles = results.map(({role_id, title }) => ({
         name: title,
         value: role_id,
       }));
@@ -183,7 +183,7 @@ function addEmployees() {
               },
             ])
             .then((response) => {
-              const query = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ('${response.firstName}', '${response.lastName}', '${response.role_id}', '${response.manager_id}')`;
+              const query = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ('${response.firstName}', '${response.lastName}', '${response.role}', '${response.manager}')`;
               connection.query(query, (error) => {
                 if (error) {
                   console.error(error);
@@ -232,47 +232,45 @@ function addDepartments() {
 
 
 
-//  function updateEmployee() {
-// const employees = "SELECT employee.employee_id, employee.first_name, employee.last_name, roles.title FROM employee LEFT JOIN roles ON employee.role_id = roles.id";
-//    const roles = "Select * FROM roles";
-//   connection.query (employees,(error, employees) => {
-//     if (error) throw error;
-//     connection.query (roles,(error, roles) => {
-//     if (error) throw error;
-//       inquirer
-//       .prompt([
-//         {
-//           type: "list",
-//           name: "employee",
-//           message: "Which employee would you like to update?",
-//           choices: resEmployees.map(
-//             (employee) =>
-//             `${employee.first_name} ${employee.last_name}`
-//           ),
-//         },
-//         {
-//           type: "list",
-//           name: "role",
-//           message: "Select the new role",
-//           choices: resRoles.map((role) => role.title),
-//         },
-//       ]).then (response) => {
-// //         const employee = resEmployees.find(
-// //           (employee) =>
-// //             `${employee.first_name} ${employee.last_name}` === response.employee
-// //           );
-//           // const role = resRoles.find(
-//           //    (role) => role.title === response.role
-//           //  );
-//            const query =
-//          `UPDATE employee SET role_id WHERE id = ('${response.role_id')`
-//          connection.query(
-//            query, [role.id, employee.id],
-//            (error, result) => {
-//                if (error) throw error;
-//           );
-//            start();
-//  }
-//      })
-//    })
-//  };
+ function updateEmployeeRole() {
+const employeeQ = "SELECT employee.employee_id, employee.first_name, employee.last_name, roles.title FROM employee LEFT JOIN roles ON employee.role_id = roles.id";
+   const rolesQ = "Select * FROM roles";
+   connection.query (employeeQ,(error, employeeR) => {
+    if (error) throw error; 
+    connection.query (rolesQ,(error, rolesR) => {
+    if (error) throw error;
+      inquirer
+      .prompt([
+        {
+          type: "list",
+          name: "employee",
+          message: "Which employee would you like to update?",
+          choices: employeeR.map((employee) => `${employee.first_name} ${employee.last_name}`),
+        },
+        {
+          type: "list",
+          name: "role",
+          message: "Select the new role",
+          choices: rolesR.map((role) => role.title),
+        },
+      ])
+      .then ((response) => {
+        const employee = employeeR.find(
+          (employee) =>
+            `${employee.first_name} ${employee.last_name}` === response.employee
+          );
+          const role = rolesR.find(
+             (role) => role.title === response.role
+           );
+           const query = "UPDATE employee SET role_id = ? WHERE id = ?";
+         connection.query(query, [role.id, employee.id], (error, results) => {
+               if (error) throw error;
+               console.log("Updated Employee Role in the database!");
+           });
+           start();
+          }
+      );
+      });
+    });
+  };
+ 
