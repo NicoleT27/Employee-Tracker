@@ -263,12 +263,13 @@ function updateEmployeeRole() {
               `${response.employee}`
           );
           const role = rolesR.find((role) => role.title === `${response.role}`);
-          const query = "UPDATE employee SET role_id = ? WHERE id = ?";
-          connection.query(query, [role.id, employee.id], (error, results) => {
+          const query = "UPDATE employee SET role_id = ? WHERE employee_id = ?";
+          connection.query(query, [role.role_id, employee.employee_id], (error, results) => {
             if (error) throw error;
             console.log("Updated Employee Role in the database!");
+            start();
           });
-          start();
+        
         });
     });
   });
